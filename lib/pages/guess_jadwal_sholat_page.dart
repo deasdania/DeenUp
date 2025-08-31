@@ -16,7 +16,7 @@ class GuestJadwalSholatPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Prayer Schedule (Guest)',
+          'Prayer Times',
           style: GoogleFonts.arimo(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -60,7 +60,7 @@ class GuestJadwalSholatPage extends StatelessWidget {
             children: [
               _buildGuestNotice(),
               _buildCitySelector(_controller),
-              _buildDatePicker(context, _controller), 
+              _buildDatePicker(context),
               _buildPrayerTimes(),
             ],
           ),
@@ -75,9 +75,11 @@ class GuestJadwalSholatPage extends StatelessWidget {
       padding: EdgeInsets.all(16),
       margin: EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-        color: Colors.white, 
+        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color.fromARGB(255, 255, 0, 0).withOpacity(0.1)),
+        border: Border.all(
+          color: const Color.fromARGB(255, 255, 0, 0).withOpacity(0.1),
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -163,7 +165,10 @@ class GuestJadwalSholatPage extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Obx(
-            () => controller.isExpanded.value
+            () =>
+                controller
+                    .isExpanded
+                    .value // Use controller.isExpanded
                 ? Container(
                     height: 200,
                     child: ListView.builder(
@@ -186,7 +191,7 @@ class GuestJadwalSholatPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDatePicker(BuildContext context, JadwalSholatController controller) {
+  Widget _buildDatePicker(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(16),
@@ -219,21 +224,24 @@ class GuestJadwalSholatPage extends StatelessWidget {
               onTap: () async {
                 final DateTime? picked = await showDatePicker(
                   context: context,
-                  initialDate: controller.selectedDate.value,
+                  initialDate: _controller.selectedDate.value,
                   firstDate: DateTime(2000),
                   lastDate: DateTime(2101),
                   builder: (BuildContext context, Widget? child) {
                     return Theme(
                       data: ThemeData.light().copyWith(
-                        colorScheme: ColorScheme.light(primary: Color(Constant.mainColor)),
-                        dialogBackgroundColor: Colors.white,
+                        colorScheme: ColorScheme.light(
+                          primary: Color(Constant.mainColor),
+                        ),
+                        dialogBackgroundColor:
+                            Colors.white, // Set background color of the dialog
                       ),
                       child: child!,
                     );
                   },
                 );
                 if (picked != null) {
-                  controller.updateSelectedDate(picked);
+                  _controller.updateSelectedDate(picked);
                 }
               },
               child: Container(
@@ -246,7 +254,9 @@ class GuestJadwalSholatPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      DateFormat('dd MMMM yyyy').format(controller.selectedDate.value),
+                      DateFormat(
+                        'dd MMMM yyyy',
+                      ).format(_controller.selectedDate.value),
                       style: GoogleFonts.arimo(
                         fontSize: 14,
                         color: Color(0xFF2C3E50),
@@ -286,7 +296,7 @@ class GuestJadwalSholatPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Prayer Schedule',
+              'Prayer Times',
               style: GoogleFonts.arimo(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -311,7 +321,7 @@ class GuestJadwalSholatPage extends StatelessWidget {
                         ),
                         SizedBox(height: 16),
                         Text(
-                          'Failed to load prayer schedule',
+                          'Failed to load prayer times',
                           style: GoogleFonts.arimo(
                             fontSize: 16,
                             color: Color(0xFF7F8C8D),
@@ -322,38 +332,33 @@ class GuestJadwalSholatPage extends StatelessWidget {
                   );
                 }
 
-                // Display prayer times
+                // Display
                 return SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      //Removed container
+                      // Prayer times cards
                       PrayerTimeCard(
-                        // key: Key('fajr'),
                         name: 'Fajr',
                         time: _controller.prayerTimes.value!.subuh,
                         iconPath: 'assets/icons/Shalat-Shubuh.png',
                       ),
                       PrayerTimeCard(
-                        // key: Key('dhuhr'),
                         name: 'Dhuhr',
                         time: _controller.prayerTimes.value!.dzuhur,
                         iconPath: 'assets/icons/Shalat-Zhuhur.png',
                       ),
                       PrayerTimeCard(
-                        // key: Key('asr'),
                         name: 'Asr',
                         time: _controller.prayerTimes.value!.ashar,
                         iconPath: 'assets/icons/Shalat-Ashar.png',
                       ),
                       PrayerTimeCard(
-                        // key: Key('maghrib'),
                         name: 'Maghrib',
                         time: _controller.prayerTimes.value!.maghrib,
                         iconPath: 'assets/icons/Shalat-Maghrib.png',
                       ),
                       PrayerTimeCard(
-                        // key: Key('isha'),
                         name: 'Isha',
                         time: _controller.prayerTimes.value!.isya,
                         iconPath: 'assets/icons/Shalat-Isya.png',

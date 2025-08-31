@@ -7,6 +7,13 @@ import 'package:deenup/const/main_themes.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
+  void handleBackNavigation(context) {
+    if (Navigator.of(context).canPop()) {
+      Get.back();
+    } else {
+      Get.toNamed(AppRoutes.getStarted);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +29,7 @@ class LoginPage extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Color(0xFF2C3E50)),
-          onPressed: () => Get.back(),
+          onPressed: () => handleBackNavigation(context),
         ),
       ),
       body: SafeArea(
